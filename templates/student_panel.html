@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head><title>Student Panel</title></head>
+<body>
+    <h1>Student Panel</h1>
+    {% if error %}<p style="color: red;">{{ error }}</p>{% endif %}
+    <form method="post">
+        Name: <input type="text" name="name"><br>
+        DOB: <input type="text" name="dob"><br>
+        Roll No: <input type="text" name="rollno"><br>
+        <button type="submit" name="add_student">Add Student</button>
+    </form>
+    <h2>Students:</h2>
+    <table border="1">
+        <tr><th>ID</th><th>Name</th><th>DOB</th><th>Roll No</th><th>Action</th></tr>
+        {% for student in students %}
+        <tr>
+            <td>{{ student[0] }}</td>
+            <td>{{ student[1] }}</td>
+            <td>{{ student[2] }}</td>
+            <td>{{ student[3] }}</td>
+            <td>
+                <form method="post" style="display: inline;">
+                    <input type="hidden" name="student_id" value="{{ student[0] }}">
+                    <button type="submit" name="delete_student">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="/admin_panel"><button>Back to Admin Panel</button></a>
+</body>
+</html>

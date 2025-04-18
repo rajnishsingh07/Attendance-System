@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    img {
+        width: 50%;
+        height: auto;
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation: fadeout 1s ease-in-out forwards;
+
+    }
+
+    @keyframes fadeout {
+        0% {
+            opacity: 0;
+        }
+        25% {
+            opacity: 0.5;
+        }
+        50% {
+            opacity: 1;
+        }
+        75% {
+            opacity: 0.5;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
+    a {
+        text-decoration: none;
+        color: white;
+    }
+    .card {
+        width: 120px;
+        height: 150px;
+        border-radius: 20px;
+        background: #f5f5f5;
+        position: relative;
+        padding: 1.8rem;
+        border: 2px solid #c3c6ce;
+        transition: 0.5s ease-out;
+        overflow: visible;
+        margin: 0px;
+        background-color: rgb(19, 18, 33);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .card-details {
+        color: white;
+        height: 100%;
+        gap: 0.5em;
+        display: grid;
+        place-content: center;
+    }
+
+    .text-body {
+        color: white;
+    }
+
+    .text-title {
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
+    .card:hover {
+        border-color: #008bf8;
+        box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.25);
+    }
+    .card_holder {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: fit-content;
+        width: fit-content;
+        gap: 2em;
+        opacity: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    .card_holder {
+        animation: fadein 1s ease-in-out forwards ;
+        animation-delay: 1s;
+    }
+    @keyframes fadein {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+    @media screen and (max-width: 768px) {
+        .card_holder {
+            flex-direction: column;
+            gap: 1em;
+        }
+        
+        
+    }
+    </style>
+<body>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="">
+    <div class="card_holder">
+        <!--Admin-->
+    <a class="text-title" href="/admin">
+        <div class="card">
+            <div class="card-details">
+            Admin's Panel
+            <p class="text-body">Admin login here</p>
+            </div>
+        </div>
+    </a>
+        <!-- Teachers -->
+    <a class="text-title" href="/teacher_login">
+        <div class="card">
+            <div class="card-details">
+            Teacher's Panel
+            <p class="text-body">Teacher login here</p>
+            </div>
+        </div>
+    </a>
+        <!-- students -->
+    <a class="text-title" href="/student">
+        <div class="card">
+            <div class="card-details">
+            Student's Panel
+            <p class="text-body">Student login here</p>
+            </div>
+        </div>
+    </a>
+    </div>
+</body>
+</html>

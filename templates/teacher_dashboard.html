@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teacher Dashboard</title>
+</head>
+<style>
+    body {
+        display: flex;
+        height: 100vh;
+        align-items: center;
+        justify-content: center;
+        background-color: rgb(106, 200, 231);
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: rgb(106, 200, 231);
+        padding: 20px;
+        border-radius: 5px;
+        border: solid 2px black;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+    }
+
+    .button {
+ --color: #00A97F;
+ padding: 0.8em 1.7em;
+ background-color: transparent;
+ border-radius: .3em;
+ position: relative;
+ overflow: hidden;
+ cursor: pointer;
+ transition: .5s;
+ font-weight: 400;
+ font-size: 17px;
+ border: 1px solid;
+ font-family: inherit;
+ text-transform: uppercase;
+ color: var(--color);
+ z-index: 1;
+}
+
+.button::before, .button::after {
+ content: '';
+ display: block;
+ width: 50px;
+ height: 50px;
+ transform: translate(-50%, -50%);
+ position: absolute;
+ border-radius: 50%;
+ z-index: -1;
+ background-color: var(--color);
+ transition: 1s ease;
+}
+
+.button::before {
+ top: -1em;
+ left: -1em;
+}
+
+.button::after {
+ left: calc(100% + 1em);
+ top: calc(100% + 1em);
+}
+
+.button:hover::before, .button:hover::after {
+ height: 410px;
+ width: 410px;
+}
+
+.button:hover {
+ color: rgb(10, 25, 30);
+}
+
+.button:active {
+ filter: brightness(.8);
+}
+
+    img {
+        margin-top: 20px;
+    }
+    
+</style>
+<body>
+    <div class="container">
+        <h1>Teacher Dashboard</h1>
+        {% if qr_image %}
+        <img src="data:image/png;base64,{{ qr_image }}" alt="QR Code" class="button">
+        {% endif %}
+        
+        <h2>Class: {{ teacher_class }}</h2>
+
+        <form method="post">
+            <button type="submit" class="button">QR Code</button>
+        </form>
+<br>
+
+        <a href="/logout">Logout</a>
+    </div>
+    <script>
+        // You would add JavaScript code here to handle QR code scanning if needed.
+    </script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #scanResult, #attendance_result {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Student Dashboard</h1>
+
+    <button id="scanButton">Scan QR Code</button>
+    <p id="scanResult"></p>
+
+    <form method="post" id="attendanceForm" style="display: none;">
+        <input type="hidden" name="qr_data" id="qr_data_input">
+    </form>
+
+    <p id="attendance_result">
+    </p>
+
+    <a href="/logout">Logout</a>
+    
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script>
+        const scanButton = document.getElementById("scanButton");
+        const scanResult = document.getElementById("scanResult");
+        const attendanceForm = document.getElementById("attendanceForm");
+        const qrDataInput = document.getElementById("qr_data_input");
+        const attendanceResult = document.getElementById("attendance_result");
+
+        scanButton.addEventListener("click", () => {
+            Html5Qrcode.getCameras().then(cameras => {
+                if (cameras && cameras.length) {
+                    let cameraId;
+                    // Find the back camera (environment)
+                    const backCamera = cameras.find(camera => camera.label.toLowerCase().includes("back") || camera.label.toLowerCase().includes("environment"));
+                    if (backCamera) {
+                        cameraId = backCamera.id;
+                    } else {
+                        cameraId = cameras[0].id; // Fallback to the first camera
+                    }
+
+                    const html5QrCode = new Html5Qrcode("scanResult");
+                    html5QrCode.start(
+                        cameraId,
+                        {
+                            fps: 10,
+                            qrbox: { width: 400, height: 400 }
+                        },
+                        (decodedText, decodedResult) => {
+                            html5QrCode.stop();
+                            qrDataInput.value = decodedText;
+                            attendanceForm.submit();
+                        },
+                        (errorMessage) => {
+                            console.log(errorMessage);
+                        }
+                    ).catch((err) => {
+                        console.log(err);
+                    });
+                } else {
+                    scanResult.textContent = "No cameras found.";
+                }
+            }).catch(err => {
+                console.error(err);
+                scanResult.textContent = "Error accessing cameras.";
+            });
+        });
+
+        attendanceForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(attendanceForm);
+            const response = await fetch('/student', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const result = await response.text();
+            attendanceResult.textContent = result;
+            attendanceForm.style.display = "none";
+            scanResult.innerHTML = "";
+        });
+    </script>
+</body>
+</html>
